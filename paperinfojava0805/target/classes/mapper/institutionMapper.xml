@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.shxy.sudatqd.mapper.institutionMapper">
+    <select id="selectInstitutionItems" resultType="com.shxy.models.views.institutionItem">
+        SELECT 	i.*,u.userName AS creator,
+        m.pictureLocation AS pictureLocation,
+        m.homePage AS homePage
+                FROM  (institution i left join user u ON i.creatorId = u.userId)
+        JOIN picture m on i.institutionId=m.objectId
+
+        <where>
+            <if test="institutionName != null and institutionName != ''">
+                AND i.institutionName LIKE CONCAT('%', #{institutionName}, '%')
+            </if>
+            <if test="institutionLocation != null and institutionLocation != ''">
+                AND i.institutionLocation LIKE CONCAT('%', #{institutionLocation}, '%')
+            </if>
+            <if test="institutionDescription != null and institutionDescription != ''">
+                AND i.institutionDescription LIKE CONCAT('%', #{institutionDescription}, '%')
+            </if>
+            <if test="userName != null and userName != ''">
+                AND u.userName LIKE CONCAT('%', #{userName}, '%')
+            </if>
+            <if test="state != null">
+                AND i.state = #{state}
+            </if>
+            <if test="startDate != null and endDate != null">
+                AND i.institutionDate BETWEEN #{startDate} AND #{endDate}
+            </if>
+            <if test="startDate != null and endDate == null">
+                AND i.institutionDate &gt;= #{startDate}
+            </if>
+            <if test="startDate == null and endDate != null">
+                AND i.institutionDate &lt;= #{endDate}
+            </if>
+            AND m.homePage =0
+            AND m.objectType =2
+        </where>
+        ORDER BY ${orderColumn} ${isAsc ? 'ASC' : 'DESC'}
+    </select>
+    <select id="selectOneInstitutionItem" resultType="com.shxy.models.views.institutionItem">
+        SELECT 	i.*,
+        u.userName
+        FROM institution i
+        LEFT JOIN user u ON i.creatorId = u.userId
+        <where>
+            <if test="institutionId != null">
+                AND i.institutionId = #{institutionId}
+            </if>
+        </where>
+    </select>
+
+    <select id="selectInstitutionItem" resultType="com.shxy.models.views.archiveItem">
+        SELECT 	ap.*,
+        a.archiveName,
+        a.archiveId,
+        u.userName AS creatorName
+        FROM
+        institution ap
+        LEFT JOIN
+        archive a
+        ON
+        ap.institutionId = a.institutionId
+        LEFT JOIN
+        user u
+        ON
+        ap.creatorId = u.userId
+        <where>
+            <if test="institutionId != null">
+                AND ap.institutionId = #{institutionId}
+            </if>
+        </where>
+    </select>
+</mapper>

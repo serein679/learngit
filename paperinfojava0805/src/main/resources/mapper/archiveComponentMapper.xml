@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.shxy.sudatqd.mapper.archiveComponentMapper">
+    <select id="selectArchiveComponentItem" resultType="com.shxy.models.views.archiveComponentItem">
+        SELECT 	ap.*,
+        a.archiveName,
+        p.*,
+        u.userName AS creatorName
+        FROM
+        archiveComponent ap
+        LEFT JOIN
+        archive a
+        ON
+        ap.archiveId = a.archiveId
+        LEFT JOIN
+        component p
+        ON
+        ap.componentId = p.componentId
+        LEFT JOIN
+        user u
+        ON
+        ap.creatorId = u.userId
+        <where>
+            <if test="id != null">
+                AND ap.archiveId = #{id}
+            </if>
+            <if test="type != null">
+                AND ap.status = #{type}
+            </if>
+        </where>
+    </select>
+    <select id="selectArchiveComponentList" resultType="com.shxy.models.views.archiveComponentItem">
+        SELECT 	ap.*,
+        a.archiveName,
+        p.componentName,
+        u.userName AS creatorName
+        FROM
+        archiveComponent ap
+        LEFT JOIN
+        archive a
+        ON
+        ap.archiveId = a.archiveId
+        LEFT JOIN
+        component p
+        ON
+        ap.componentId = p.componentId
+        LEFT JOIN
+        user u
+        ON
+        ap.creatorId = u.userId
+        <where>
+            <if test="id != null">
+                AND ap.componentId = #{id}
+            </if>
+            <if test="type != null">
+                AND ap.status = #{type}
+            </if>
+        </where>
+    </select>
+
+</mapper>

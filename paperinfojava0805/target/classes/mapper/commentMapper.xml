@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.shxy.sudatqd.mapper.commentMapper">
+    <select id="selectTypeCommentList" resultType="com.shxy.models.views.operation.commentItem">
+        SELECT 	f.*,
+        u.userName,
+        u.picture
+        FROM comment f
+        LEFT JOIN user u ON f.userId = u.userId
+        <where>
+            <if test="id != null">
+                AND f.objectId = #{id}
+            </if>
+            <if test="type != null">
+                AND f.objectType = #{type}
+            </if>
+            AND f.commentState = 0
+        </where>
+    </select>
+
+</mapper>

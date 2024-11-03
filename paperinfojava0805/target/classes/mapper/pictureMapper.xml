@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.shxy.sudatqd.mapper.pictureMapper">
+    <select id="selectTypePictureList" resultType="com.shxy.models.views.pictureItem">
+        SELECT 	p.*,
+                u.userName AS creator
+        FROM picture p
+        LEFT JOIN user u ON p.creatorId = u.userId
+        <where>
+            <if test="id != null">
+                AND p.objectId = #{id}
+            </if>
+            <if test="type != null">
+                AND p.objectType = #{type}
+            </if>
+        </where>
+    </select>
+</mapper>

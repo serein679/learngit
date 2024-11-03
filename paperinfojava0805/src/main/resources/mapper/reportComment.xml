@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.shxy.sudatqd.mapper.reportCommentMapper">
+    <select id="reportCommentItemList" resultType="com.shxy.models.views.reportComment">
+        SELECT 	f.*,
+        u.userName as creator
+        FROM reportComment f
+        LEFT JOIN user u ON f.reporterId = u.userId
+        <where>
+            f.reportState =1
+        </where>
+        ORDER BY ${orderColumn} ${isAsc ? 'ASC' : 'DESC'}
+    </select>
+</mapper>

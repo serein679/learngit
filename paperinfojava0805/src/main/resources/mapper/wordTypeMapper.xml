@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.shxy.sudatqd.mapper.wordTypeMapper">
+    <select id="selectWordTypeItems" resultType="com.shxy.models.views.wordTypeItem">
+        SELECT 	w.*,u.userName FROM wordType w
+            LEFT JOIN user u ON w.creatorId = u.userId
+        <where>
+            <if test="typeName != null and typeName != ''">
+                AND w.typeName LIKE CONCAT('%', #{typeName}, '%')
+            </if>
+            <if test="description != null and description != ''">
+                AND w.description = LIKE CONCAT('%', #{description}, '%')
+            </if>
+            <if test="userName != null and userName != ''">
+                AND u.userName LIKE CONCAT('%', #{userName}, '%')
+            </if>
+            <if test="state != null">
+                AND w.state = #{state}
+            </if>
+        </where>
+        ORDER BY ${orderColumn} ${isAsc ? 'ASC' : 'DESC'}
+    </select>
+</mapper>

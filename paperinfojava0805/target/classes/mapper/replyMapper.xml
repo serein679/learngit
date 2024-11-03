@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.shxy.sudatqd.mapper.replyMapper">
+    <select id="selectTypeReplyList" resultType="com.shxy.models.views.operation.replyItem">
+        SELECT 	f.*,
+        u.userName
+        FROM reply f
+        LEFT JOIN user u ON f.userId = u.userId
+        <where>
+            <if test="id != null">
+                AND f.replyyId = #{id}
+            </if>
+            <if test="type != null">
+                AND f.type = #{type}
+            </if>
+        </where>
+    </select>
+</mapper>

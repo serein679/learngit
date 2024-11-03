@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.shxy.sudatqd.mapper.feedbackMapper">
+    <select id="selectTypeFeedbackList" resultType="com.shxy.models.views.operation.feedbackItem">
+        SELECT 	f.*,
+                u.userName AS creator
+        FROM feedback f
+        LEFT JOIN user u ON f.userId = u.userId
+        <where>
+            <if test="id != null">
+                AND f.objectId = #{id}
+            </if>
+            <if test="type != null">
+                AND f.feedbackType = #{type}
+            </if>
+        </where>
+    </select>
+</mapper>

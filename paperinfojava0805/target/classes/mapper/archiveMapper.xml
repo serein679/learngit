@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.shxy.sudatqd.mapper.archiveMapper">
+    <select id="selectArchiveItems" resultType="com.shxy.models.views.archiveItem">
+        SELECT 	a.*,i.institutionName,u.userName AS creator,m.pictureLocation AS pictureLocation FROM archive a
+                          LEFT JOIN institution i ON a.institutionId = i.institutionId
+                             LEFT JOIN user u ON a.creatorId = u.userId
+                                LEFT JOIN picture m on a.archiveId=m.objectId
+        <where>
+            <if test="archiveName != null and archiveName != ''">
+                AND a.archiveName LIKE CONCAT('%', #{archiveName}, '%')
+            </if>
+            <if test="institutionName != null and institutionName != ''">
+                AND i.institutionName LIKE CONCAT('%', #{institutionName}, '%')
+            </if>
+            <if test="archiveType != null">
+                AND a.archiveType = #{archiveType}
+            </if>
+            <if test="archiveContent != null and archiveContent != ''">
+                AND a.archiveContent LIKE CONCAT('%', #{archiveContent}, '%')
+            </if>
+            <if test="userName != null and userName != ''">
+                AND u.userName LIKE CONCAT('%', #{userName}, '%')
+            </if>
+            <if test="state != null">
+                AND a.archiveStateType = #{state}
+            </if>
+            <if test="datefilter != null and datefilter1 != null">
+                and a.firstTime between #{datefilter} and #{datefilter1}
+            </if>
+            AND m.homePage =0
+            AND m.objectType =0
+        </where>
+        ORDER BY ${orderColumn} ${isAsc ? 'ASC' : 'DESC'}
+    </select>
+    <select id="selectOneArchiveItem" resultType="com.shxy.models.views.archiveItem">
+        SELECT 	a.*,
+        u.userName
+        FROM  archive a
+        LEFT JOIN user u ON a.creatorId = u.userId
+        <where>
+            <if test="archiveId != null">
+                AND a.archiveId = #{archiveId}
+            </if>
+        </where>
+    </select>
+    <select id="selectArchivePaperItem" resultType="com.shxy.models.views.archivePaperItem">
+        SELECT 	ap.*,
+        a.archiveName,
+        p.paperName,
+        u.userName AS creatorName
+        FROM
+        archivePaper ap
+        LEFT JOIN
+        archive a
+        ON
+        ap.archiveId = a.archiveId
+        LEFT JOIN
+        paper p
+        ON
+        ap.paperId = p.paperId
+        LEFT JOIN
+        user u
+        ON
+        ap.creatorId = u.userId
+        <where>
+            <if test="archiveId != null">
+                AND ap.archiveId = #{archiveId}
+            </if>
+        </where>
+    </select>
+</mapper>

@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.shxy.sudatqd.mapper.historicalEventsMapper">
+<select id="selectHistoryItems" resultType="com.shxy.models.views.historyItem">
+    SELECT 	i.*,u.userName AS creator,
+    m.pictureLocation AS pictureLocation,
+    m.homePage AS homePage
+    FROM  (historicalEvents i left join user u ON i.creatorId = u.userId)
+    JOIN picture m on i.eventId=m.objectId
+
+    <where>
+        <if test="eventName != null and eventName != ''">
+            AND i.eventName LIKE CONCAT('%', #{eventName}, '%')
+        </if>
+        <if test="eventPic != null and eventPic != ''">
+            AND i.eventPic LIKE CONCAT('%', #{eventPic}, '%')
+        </if>
+        <if test="eventDescription != null and eventDescription != ''">
+            AND i.eventDescriptionn LIKE CONCAT('%', #{eventDescription}, '%')
+        </if>
+        <if test="userName != null and userName != ''">
+            AND u.userName LIKE CONCAT('%', #{userName}, '%')
+        </if>
+        <if test="state != null">
+            AND i.state = #{state}
+        </if>
+        <if test="eventDate == null and eventDate != null">
+            AND i.eventDate &lt;= #{eventDate}
+        </if>
+        AND m.homePage =0
+        AND m.objectType =3
+    </where>
+    ORDER BY ${orderColumn} ${isAsc ? 'ASC' : 'DESC'}
+</select>
+    <select id="selectOneHistoryItem" resultType="com.shxy.models.views.historyItem">
+        SELECT 	i.*,
+        u.userName
+        FROM historicalEvents i
+        LEFT JOIN user u ON i.creatorId = u.userId
+        <where>
+            <if test="eventId != null">
+                AND i.eventId = #{eventId}
+            </if>
+        </where>
+    </select>
+</mapper>

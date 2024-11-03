@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.shxy.sudatqd.mapper.paperFiberMapper">
+    <select id="selectPaperFiberItem" resultType="com.shxy.models.views.paperFiberItem">
+        SELECT 	ap.*,
+        a.paperName,
+        p.*,
+        u.userName AS creatorName
+        FROM
+        paperFiber ap
+        LEFT JOIN
+        paper a
+        ON
+        ap.paperId = a.paperId
+        LEFT JOIN
+        fiber p
+        ON
+        ap.fiberId = p.fiberId
+        LEFT JOIN
+        user u
+        ON
+        ap.creatorId = u.userId
+        <where>
+        <if test="id != null">
+            AND ap.fiberId = #{id}
+        </if>
+        <if test="type != null">
+            AND ap.status = #{type}
+        </if>
+        </where>
+    </select>
+
+</mapper>

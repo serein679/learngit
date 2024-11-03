@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.shxy.sudatqd.mapper.archivePaperMapper">
+    <select id="selectArchivePaperItems" resultType="com.shxy.models.views.archivePaperItem">
+        SELECT 	ap.*,
+                a.archiveName,
+                p.paperName,
+                u.userName AS creatorName
+        FROM
+        archivePaper ap
+        LEFT JOIN
+        archive a
+        ON
+        ap.archiveId = a.archiveId
+        LEFT JOIN
+        paper p
+        ON
+        ap.paperId = p.paperId
+        LEFT JOIN
+        user u
+        ON
+        ap.creatorId = u.userId
+        <where>
+            <if test="paperId != null">
+                AND ap.paperId = #{paperId}
+            </if>
+        </where>
+    </select>
+
+</mapper>

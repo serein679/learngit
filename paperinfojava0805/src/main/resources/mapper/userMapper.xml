@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.shxy.sudatqd.mapper.userMapper">
+    <select id="selectUsers" resultType="com.shxy.models.dbBean.user">
+        SELECT 	u.* FROM user u
+        <where>
+            <if test="userName != null and userName != ''">
+                AND u.userName LIKE CONCAT('%', #{userName}, '%')
+            </if>
+            <if test="state != null">
+                AND u.state = #{state}
+            </if>
+        </where>
+        ORDER BY ${orderColumn} ${isAsc ? 'ASC' : 'DESC'}
+    </select>
+</mapper>

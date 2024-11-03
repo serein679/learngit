@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.shxy.sudatqd.mapper.permissionMapper">
+    <select id="selectPermissionItems" resultType="com.shxy.models.views.permissionItem">
+        SELECT 	p.*,u.userName AS creator FROM permission p
+            LEFT JOIN user u ON p.creatorId = u.userId
+        <where>
+            <if test="permissionName != null and permissionName != ''">
+                AND p.permissionName LIKE CONCAT('%', #{permissionName}, '%')
+            </if>
+            <if test="description != null and description != ''">
+                AND p.description = LIKE CONCAT('%', #{description}, '%')
+            </if>
+            <if test="userName != null and userName != ''">
+                AND u.userName LIKE CONCAT('%', #{userName}, '%')
+            </if>
+            <if test="state != null">
+                AND p.state = #{state}
+            </if>
+        </where>
+        ORDER BY ${orderColumn} ${isAsc ? 'ASC' : 'DESC'}
+    </select>
+</mapper>

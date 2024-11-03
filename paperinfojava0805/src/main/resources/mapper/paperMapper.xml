@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.shxy.sudatqd.mapper.paperMapper">
+    <select id="selectPaperItems" resultType="com.shxy.models.views.paperItem">
+        SELECT 	p.*,
+                u.userName AS creator,
+                m.pictureLocation AS pictureLocation,
+                m.homePage AS homePage
+        FROM  (paper p left join user u ON p.creatorId = u.userId)
+                           JOIN picture m on p.paperId=m.objectId
+        <where>
+            <if test="paperName != null and paperName != ''">
+                AND p.paperName LIKE CONCAT('%', #{paperName}, '%')
+            </if>
+            <if test="paperDes != null and paperDes != ''">
+                AND p.paperDes LIKE CONCAT('%', #{paperDes}, '%')
+            </if>
+            <if test="paperType != null">
+                AND p.paperType = #{paperType}
+            </if>
+            <if test="location != null and location != ''">
+                AND p.location LIKE CONCAT('%', #{location}, '%')
+            </if>
+            <if test="process != null and process != ''">
+                AND p.process LIKE CONCAT('%', #{process}, '%')
+            </if>
+            <if test="technology != null and technology != ''">
+                AND p.technology LIKE CONCAT('%', #{technology}, '%')
+            </if>
+            <if test="userName != null and userName != ''">
+                AND u.userName LIKE CONCAT('%', #{userName}, '%')
+            </if>
+            <if test="state != null">
+                AND p.state = #{state}
+            </if>
+            AND m.homePage =0
+            AND m.objectType =1
+        </where>
+        ORDER BY ${orderColumn} ${isAsc ? 'ASC' : 'DESC'}
+    </select>
+
+    <select id="selectOnePaperItem" resultType="com.shxy.models.views.paperItem">
+        SELECT 	p.*,
+                u.userName,
+        m.pictureLocation AS pictureLocation,
+        m.homePage AS homePage
+        FROM  (paper p left join user u ON p.creatorId = u.userId)
+        JOIN picture m on p.paperId=m.objectId
+        <where>
+            <if test="paperId != null">
+                AND p.paperId = #{paperId}
+            </if>
+            AND m.homePage =0
+            AND m.objectType =1
+        </where>
+    </select>
+</mapper>

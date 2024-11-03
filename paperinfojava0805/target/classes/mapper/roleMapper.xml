@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.shxy.sudatqd.mapper.roleMapper">
+    <select id="selectRoleItems" resultType="com.shxy.models.views.roleItem">
+        SELECT 	r.*,u.userName AS creator FROM role r
+            LEFT JOIN user u ON r.creatorId = u.userId
+        <where>
+            <if test="roleName != null and roleName != ''">
+                AND r.roleName LIKE CONCAT('%', #{roleName}, '%')
+            </if>
+            <if test="description != null and description != ''">
+                AND r.description = LIKE CONCAT('%', #{description}, '%')
+            </if>
+            <if test="userName != null and userName != ''">
+                AND u.userName LIKE CONCAT('%', #{userName}, '%')
+            </if>
+            <if test="state != null">
+                AND r.state = #{state}
+            </if>
+        </where>
+        ORDER BY ${orderColumn} ${isAsc ? 'ASC' : 'DESC'}
+    </select>
+</mapper>

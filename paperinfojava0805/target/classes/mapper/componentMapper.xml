@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.shxy.sudatqd.mapper.componentMapper">
+    <select id="selectComponentItems" resultType="com.shxy.models.views.componentItem">
+        SELECT 	c.*,
+                u.userName AS creator FROM component c
+                          LEFT JOIN user u ON c.creatorId = u.userId
+        <where>
+            <if test="componentName != null and componentName != ''">
+                AND c.componentName LIKE CONCAT('%', #{componentName}, '%')
+            </if>
+            <if test="componentType != null and componentType != ''">
+                AND c.componentType = #{componentType}
+            </if>
+            <if test="userName != null and userName != ''">
+                AND u.userName LIKE CONCAT('%', #{userName}, '%')
+            </if>
+            <if test="state != null">
+                AND c.state = #{state}
+            </if>
+        </where>
+        ORDER BY ${orderColumn} ${isAsc ? 'ASC' : 'DESC'}
+    </select>
+    <select id="selectOneComponentItem" resultType="com.shxy.models.views.componentItem">
+        SELECT 	a.*,
+        u.userName
+        FROM  component a
+        LEFT JOIN user u ON a.creatorId = u.userId
+        <where>
+            <if test="componentId != null">
+                AND a.componentId = #{componentId}
+            </if>
+        </where>
+    </select>
+</mapper>
