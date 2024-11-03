@@ -1,0 +1,1 @@
+"use strict";(self["webpackChunksudatqd"]=self["webpackChunksudatqd"]||[]).push([[2269],{62269:function(e,t,u){u.r(t),u.d(t,{default:function(){return d}});var r,n,a={created(){const{params:e,query:t}=this.$route,{path:u}=e;this.$router.replace({path:"/"+u,query:t})},render:function(e){return e()}},s=a,l=u(81656),c=(0,l.A)(s,r,n,!1,null,null,null),d=c.exports}}]);
